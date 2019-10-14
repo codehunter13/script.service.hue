@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 
-import kodiHue
+import resources.lib.kodiHue
 import xbmc
 
 from resources.lib import globals
@@ -19,7 +19,8 @@ ALLMEDIA = 3
 
 class KodiGroup(xbmc.Player):
     def __init__(self):
-        super(xbmc.Player, self).__init__()
+        # super(xbmc.Player, self).__init__()
+        super().__init__()
 
     def load_settings(self):
         logger.debug("KodiGroup Load settings")

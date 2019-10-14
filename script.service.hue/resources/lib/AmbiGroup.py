@@ -151,7 +151,6 @@ class AmbiGroup(KodiGroup.KodiGroup):
             self.capture_size = globals.ADDON.setSettingString("average_process_time",
                                                                "{}".format(average_process_time))
 
-
         except Exception as ex:
             logger.exception("Exception in _ambiLoop")
         logger.debug("_ambiLoop stopped")

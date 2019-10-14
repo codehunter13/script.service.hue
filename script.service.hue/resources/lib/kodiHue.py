@@ -397,7 +397,7 @@ def connect_bridge(monitor, silent=False):
             logger.debug("in Connect(): Bridge responding to connection test.")
         else:
             logger.debug("in Connect(): Bridge not responding to connection test, attempt finding a new bridge IP.")
-            bridge_ip = discover_bridge_ip(monitor)
+            bridge_ip = discover_bridge_ip()
             if bridge_ip:
                 logger.debug("in Connect(): New IP found: {}. Saving".format(bridge_ip))
                 globals.ADDON.setSettingString("bridge_ip", bridge_ip)
@@ -489,7 +489,8 @@ def perf_average(process_times):
 
 class HueMonitor(xbmc.Monitor):
     def __init__(self):
-        super(xbmc.Monitor, self).__init__()
+        #super(xbmc.Monitor, self).__init__()
+        super().__init__()
 
     def onSettingsChanged(self):
         logger.info("Settings changed")

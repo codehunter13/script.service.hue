@@ -1,4 +1,4 @@
-'''
+"""
 Created on Sep. 25, 2019
 
 Based on ScreenBloom by Tyler Kershner
@@ -6,10 +6,10 @@ https://github.com/kershner/screenBloom
 http://www.screenbloom.com/
 
 
-'''
+"""
 
 from PIL import ImageEnhance
-from globals import timer
+from .globals import timer
 
 
 # ===============================================================================
@@ -20,14 +20,14 @@ from globals import timer
 
 
 class ImageProcess(object):
-    '''
+    """
     classdocs
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         Constructor
-        '''
+        """
         self.LOW_THRESHOLD = 10
         self.MID_THRESHOLD = 40
         self.HIGH_THRESHOLD = 240

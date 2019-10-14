@@ -30,7 +30,9 @@ initial_flash = False
 reload_flash = False
 enable_schedule = False
 ambi_enabled = False
-connection_message = False
+disable_connection_message = False
+start_time = None
+end_time = None
 
 video_minimum_duration = 0
 video_enable_movie = True

@@ -85,7 +85,7 @@ class ColorHelper:
 
     def cross_product(self, p1, p2):
         """Returns the cross product of two XYPoints."""
-        return (p1.x * p2.y - p1.y * p2.x)
+        return p1.x * p2.y - p1.y * p2.x
 
     def check_point_in_lamps_reach(self, p):
         """Check if the provided XYPoint can be recreated by a Hue lamp."""
@@ -127,11 +127,11 @@ class ColorHelper:
         lowest = dAB
         closest_point = pAB
 
-        if (dAC < lowest):
+        if dAC < lowest:
             lowest = dAC
             closest_point = pAC
 
-        if (dBC < lowest):
+        if dBC < lowest:
             lowest = dBC
             closest_point = pBC
 
@@ -155,9 +155,9 @@ class ColorHelper:
         green = green_i / 255.0
         blue = blue_i / 255.0
 
-        r = ((red + 0.055) / (1.0 + 0.055))**2.4 if (red > 0.04045) else (red / 12.92)
-        g = ((green + 0.055) / (1.0 + 0.055))**2.4 if (green > 0.04045) else (green / 12.92)
-        b = ((blue + 0.055) / (1.0 + 0.055))**2.4 if (blue > 0.04045) else (blue / 12.92)
+        r = ((red + 0.055) / (1.0 + 0.055)) ** 2.4 if (red > 0.04045) else (red / 12.92)
+        g = ((green + 0.055) / (1.0 + 0.055)) ** 2.4 if (green > 0.04045) else (green / 12.92)
+        b = ((blue + 0.055) / (1.0 + 0.055)) ** 2.4 if (blue > 0.04045) else (blue / 12.92)
 
         X = r * 0.664511 + g * 0.154324 + b * 0.162028
         Y = r * 0.283881 + g * 0.668433 + b * 0.047685
@@ -201,7 +201,8 @@ class ColorHelper:
         b = X * 0.051713 - Y * 0.121364 + Z * 1.011530
 
         # Apply reverse gamma correction
-        r, g, b = [(12.92 * x) if (x <= 0.0031308) else ((1.0 + 0.055) * pow(x, (1.0 / 2.4)) - 0.055) for x in [r, g, b]]
+        r, g, b = [(12.92 * x) if (x <= 0.0031308) else ((1.0 + 0.055) * pow(x, (1.0 / 2.4)) - 0.055) for x in
+                   [r, g, b]]
 
         # Bring all negative components to zero
         r, g, b = [max(0, x) for x in [r, g, b]]
@@ -214,7 +215,7 @@ class ColorHelper:
         r, g, b = [int(x * 255) for x in [r, g, b]]
 
         # Convert the RGB values to your color object The rgb values from the above formulas are between 0.0 and 1.0.
-        return (r, g, b)
+        return r, g, b
 
 
 class Converter:
@@ -234,7 +235,7 @@ class Converter:
         x and y coordinates.
         """
         point = self.color.get_xy_point_from_rgb(red, green, blue)
-        return (point.x, point.y)
+        return point.x, point.y
 
     def xy_to_hex(self, x, y, bri=1):
         """Converts CIE 1931 x and y coordinates and brightness value from 0 to 1
@@ -246,7 +247,7 @@ class Converter:
         """Converts CIE 1931 x and y coordinates and brightness value from 0 to 1
         to a CSS hex color."""
         r, g, b = self.color.get_rgb_from_xy_and_brightness(x, y, bri)
-        return (r, g, b)
+        return r, g, b
 
     def get_random_xy_color(self):
         """Returns the approximate CIE 1931 x,y coordinates represented by the
