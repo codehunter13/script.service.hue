@@ -43,10 +43,10 @@ class KodiLogHandler(logging.StreamHandler):
 
 
 def config():
-    separateLogFile=globals.ADDON.getSettingBool("separateLogFile")
+    separate_log_file=globals.ADDON.getSettingBool("separate_log_file")
     logger = logging.getLogger(globals.ADDONID)
 
-    if separateLogFile:
+    if separate_log_file:
         if not os.path.isdir(globals.ADDONDIR):
             #xbmc.log("Hue Service: profile directory doesn't exist: " + globals.ADDONDIR + "   Trying to create.", level=xbmc.LOGNOTICE)
             try:
@@ -56,10 +56,10 @@ def config():
                 xbmc.log("Hue Service: Log: can't create directory: " + globals.ADDONDIR, level=xbmc.LOGERROR)
                 xbmc.log("Exception: {}".format(e.message), xbmc.LOGERROR)
 
-        fileHandler = TimedRotatingFileHandler(os.path.join(globals.ADDONDIR, 'kodiHue.log'), when="midnight",  backupCount=2)
-        fileHandler.setLevel(logging.DEBUG)
-        fileHandler.setFormatter(fileFormatter)
-        logger.addHandler(fileHandler)
+        file_handler = TimedRotatingFileHandler(os.path.join(globals.ADDONDIR, 'kodiHue.log'), when="midnight",  backupCount=2)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(fileFormatter)
+        logger.addHandler(file_handler)
 
     logger.addHandler(KodiLogHandler())
     logger.setLevel(logging.DEBUG)

@@ -3,13 +3,12 @@
 
 import json
 import re
-import sys
-#from builtins import input
-#from builtins import object
-#from builtins import str
-from socket import getfqdn
 
 import requests
+
+# from builtins import input
+# from builtins import object
+# from builtins import str
 
 # for hostname retrieval for registering with the bridge
 __all__ = ('Bridge', 'QhueException')
