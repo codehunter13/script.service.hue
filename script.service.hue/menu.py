@@ -8,9 +8,9 @@ from resources.lib import kodilogging
 kodilogging.config()
 logger = logging.getLogger(globals.ADDONID)
 
-logger.info("Starting default.py, version {}, Kodi: {}".format(globals.ADDONVERSION, globals.KODIVERSION ))
+logger.info("**** Starting default.py, version {}, Kodi: {}".format(globals.ADDONVERSION, globals.KODIVERSION ))
 try:
     core.menu() #Run menu
 except Exception:
-    logger.exception("Core menu loop exception")
-logger.info("Shutting down default.py, version {}, Kodi: {}".format(globals.ADDONVERSION, globals.KODIVERSION ))
+    logger.exception("Core menu exception")
+logger.info("**** Shutting down default.py, version {}, Kodi: {}".format(globals.ADDONVERSION, globals.KODIVERSION ))

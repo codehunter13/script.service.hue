@@ -6,9 +6,8 @@ import re
 
 import requests
 
-# from builtins import input
-# from builtins import object
-# from builtins import str
+from resources.lib import globals
+
 
 # for hostname retrieval for registering with the bridge
 __all__ = ('Bridge', 'QhueException')
@@ -52,12 +51,17 @@ class Resource(object):
         else:
             r = requests.get(url, timeout=self.timeout)
         if r.status_code != 200:
+            ##########
+            globals.logger.error("Qhue Error: status: {} request: {}, {}".format(r.status_code, url, json.dumps(kwargs, default=list)))
+            globals.logger.error("Qhue Error response: {}".format(r))
+            ####################
             raise QhueException("Received response {c} from {u}".format(c=r.status_code, u=url))
         resp = r.json(object_pairs_hook=self.object_pairs_hook)
         if type(resp) == list:
             errors = [m['error']['description'] for m in resp if 'error' in m]
             if errors:
-                raise QhueException("\n".join(errors))
+                ex = "Qhue Error: status: {} request: {} {} \n response: {}".format(r.status_code,url, json.dumps(kwargs,default=list), resp)
+                raise QhueException(ex)
         return resp
 
     def __getattr__(self, name):

@@ -29,11 +29,11 @@ def load_settings():
     globals.disable_connection_message = globals.ADDON.getSettingBool("disable_connection_message")
 
     globals.video_minimum_duration = globals.ADDON.getSettingInt(
-        "video_MinimumDuration")  # Setting in Minutes. Kodi library uses seconds, needs to be converted.
-    globals.video_enable_movie = globals.ADDON.getSettingBool("video_Movie")
-    globals.video_enable_music_video = globals.ADDON.getSettingBool("video_MusicVideo")
-    globals.video_enable_episode = globals.ADDON.getSettingBool("video_Episode")
-    globals.video_enable_other = globals.ADDON.getSettingBool("video_Other")
+        "video_minimum_duration")  # Setting in Minutes. Kodi library uses seconds, needs to be converted.
+    globals.video_enable_movie = globals.ADDON.getSettingBool("video_movie")
+    globals.video_enable_music_video = globals.ADDON.getSettingBool("video_music_video")
+    globals.video_enable_episode = globals.ADDON.getSettingBool("video_episode")
+    globals.video_enable_other = globals.ADDON.getSettingBool("video_other")
 
     globals.ambi_enabled = globals.ADDON.getSettingBool("group3_enabled")
 
@@ -277,8 +277,8 @@ def configure_scene(bridge, k_group_id, action):
     scene = select_hue_scene(bridge)
     if scene is not None:
         # group0_startSceneID
-        globals.ADDON.setSettingString("group{}_{}SceneID".format(k_group_id, action), scene[0])
-        globals.ADDON.setSettingString("group{}_{}SceneName".format(k_group_id, action), scene[1])
+        globals.ADDON.setSettingString("group{}_{}_scene_id".format(k_group_id, action), scene[0])
+        globals.ADDON.setSettingString("group{}_{}_scene_name".format(k_group_id, action), scene[1])
         globals.ADDON.openSettings()
 
 
@@ -293,8 +293,8 @@ def configure_ambi_lights(bridge, k_group_id):
             light_names.append(_get_light_name(bridge, L))
             color_lights.append(L)
 
-        globals.ADDON.setSettingString("group{}_Lights".format(k_group_id), ','.join(color_lights))
-        globals.ADDON.setSettingString("group{}_LightNames".format(k_group_id), ','.join(light_names))
+        globals.ADDON.setSettingString("group{}_lights".format(k_group_id), ','.join(color_lights))
+        globals.ADDON.setSettingString("group{}_light_names".format(k_group_id), ','.join(light_names))
         globals.ADDON.openSettings()
 
 
@@ -435,7 +435,7 @@ def validate_schedule():
             logger.error("Invalid time settings: {}".format(e))
             notification(_("Hue Service"), _("Invalid start or end time, schedule disabled"),
                          icon=xbmcgui.NOTIFICATION_ERROR)
-            globals.ADDON.setSettingBool("EnableSchedule", False)
+            globals.ADDON.setSettingBool("enable_schedule", False)
             globals.enable_schedule = False
 
 

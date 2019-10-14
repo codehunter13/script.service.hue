@@ -20,20 +20,19 @@ ALLMEDIA = 3
 class KodiGroup(xbmc.Player):
     def __init__(self):
         super(xbmc.Player, self).__init__()
-        self.load_settings(self)
 
     def load_settings(self):
         logger.debug("KodiGroup Load settings")
-        self.enabled = globals.ADDON.getSettingBool("group{}_enabled".format(self.kgroupID))
+        self.enabled = globals.ADDON.getSettingBool("group{}_enabled".format(self.kgroup_id))
 
-        self.start_behavior = globals.ADDON.getSettingBool("group{}_startBehavior".format(self.kgroupID))
-        self.start_scene = globals.ADDON.getSettingString("group{}_startSceneID".format(self.kgroupID))
+        self.start_behavior = globals.ADDON.getSettingBool("group{}_start_behavior".format(self.kgroup_id))
+        self.start_scene = globals.ADDON.getSettingString("group{}_start_scene_id".format(self.kgroup_id))
 
-        self.pause_behavior = globals.ADDON.getSettingBool("group{}_pauseBehavior".format(self.kgroupID))
-        self.pause_scene = globals.ADDON.getSettingString("group{}_pauseSceneID".format(self.kgroupID))
+        self.pause_behavior = globals.ADDON.getSettingBool("group{}_pause_behavior".format(self.kgroup_id))
+        self.pause_scene = globals.ADDON.getSettingString("group{}_pause_scene_id".format(self.kgroup_id))
 
-        self.stop_behavior = globals.ADDON.getSettingBool("group{}_stopBehavior".format(self.kgroupID))
-        self.stop_scene = globals.ADDON.getSettingString("group{}_stopSceneID".format(self.kgroupID))
+        self.stop_behavior = globals.ADDON.getSettingBool("group{}_stop_behavior".format(self.kgroup_id))
+        self.stop_scene = globals.ADDON.getSettingString("group{}_stop_scene_id".format(self.kgroup_id))
 
     def setup(self, bridge, kgroup_id, flash=False, media_type=VIDEO):
         if not hasattr(self, "state"):
@@ -42,7 +41,7 @@ class KodiGroup(xbmc.Player):
         self.mediaType = media_type
 
         self.lights = bridge.lights
-        self.kgroupID = kgroup_id
+        self.kgroup_id = kgroup_id
 
         self.load_settings()
 
@@ -61,7 +60,7 @@ class KodiGroup(xbmc.Player):
     def onAVStarted(self):
         logger.info(
             "In KodiGroup[{}], onPlaybackStarted. Group enabled: {},start_behavior: {} , isPlayingVideo: {}, isPlayingAudio: {}, self.media_type: {},self.playback_type(): {}".format(
-                self.kgroupID, self.enabled, self.start_behavior, self.isPlayingVideo(), self.isPlayingAudio(),
+                self.kgroup_id, self.enabled, self.start_behavior, self.isPlayingVideo(), self.isPlayingAudio(),
                 self.mediaType, self.playback_type()))
         self.state = STATE_PLAYING
         globals.lastMediaType = self.playback_type()
@@ -85,9 +84,9 @@ class KodiGroup(xbmc.Player):
                 logger.error("onAVStarted: Hue call fail: {}".format(e))
 
     def onPlayBackStopped(self):
-        logger.info("In KodiGroup[{}], onPlaybackStopped() , media_type: {}, lastMediaType: {} ".format(self.kgroupID,
-                                                                                                       self.mediaType,
-                                                                                                       globals.lastMediaType))
+        logger.info("In KodiGroup[{}], onPlaybackStopped() , media_type: {}, lastMediaType: {} ".format(self.kgroup_id,
+                                                                                                        self.mediaType,
+                                                                                                        globals.lastMediaType))
         self.state = STATE_STOPPED
 
         try:
@@ -107,7 +106,7 @@ class KodiGroup(xbmc.Player):
 
     def onPlayBackPaused(self):
         logger.info(
-            "In KodiGroup[{}], onPlaybackPaused() , isPlayingVideo: {}, isPlayingAudio: {}".format(self.kgroupID,
+            "In KodiGroup[{}], onPlaybackPaused() , isPlayingVideo: {}, isPlayingAudio: {}".format(self.kgroup_id,
                                                                                                    self.isPlayingVideo(),
                                                                                                    self.isPlayingAudio()))
         self.state = STATE_PAUSED
@@ -126,19 +125,19 @@ class KodiGroup(xbmc.Player):
                 logger.error("onPlaybackStopped: Hue call fail: {}".format(e))
 
     def onPlayBackResumed(self):
-        logger.info("In KodiGroup[{}], onPlaybackResumed()".format(self.kgroupID))
+        logger.info("In KodiGroup[{}], onPlaybackResumed()".format(self.kgroup_id))
         self.onAVStarted()
 
     def onPlayBackError(self):
-        logger.info("In KodiGroup[{}], onPlaybackError()".format(self.kgroupID))
+        logger.info("In KodiGroup[{}], onPlaybackError()".format(self.kgroup_id))
         self.onPlayBackStopped()
 
     def onPlayBackEnded(self):
-        logger.info("In KodiGroup[{}], onPlaybackEnded()".format(self.kgroupID))
+        logger.info("In KodiGroup[{}], onPlaybackEnded()".format(self.kgroup_id))
         self.onPlayBackStopped()
 
     def sunset(self):
-        logger.info("In KodiGroup[{}], in sunset()".format(self.kgroupID))
+        logger.info("In KodiGroup[{}], in sunset()".format(self.kgroup_id))
 
         if self.state == STATE_PLAYING:  # if Kodi is playing any file, start up
             self.onAVStarted()
@@ -146,7 +145,7 @@ class KodiGroup(xbmc.Player):
             self.onPlayBackPaused()
         else:
             # if not playing and sunset happens, probably should do nothing.
-            logger.debug("In KodiGroup[{}], in sunset(). playback stopped, doing nothing. ".format(self.kgroupID))
+            logger.debug("In KodiGroup[{}], in sunset(). playback stopped, doing nothing. ".format(self.kgroup_id))
 
     def playback_type(self):
         if self.isPlayingVideo():
@@ -159,19 +158,20 @@ class KodiGroup(xbmc.Player):
 
     def check_active_time(self):
         logger.debug(
-            "Schedule: {}, daylightDiable: {}, daylight: {}, start_time: {}, end_time: {}".format(globals.enable_schedule,
-                                                                                                globals.daylight_disable,
-                                                                                                globals.daylight,
-                                                                                                globals.startTime,
-                                                                                                globals.endTime))
+            "Schedule: {}, daylightDiable: {}, daylight: {}, start_time: {}, end_time: {}".format(
+                globals.enable_schedule,
+                globals.daylight_disable,
+                globals.daylight,
+                globals.start_time,
+                globals.end_time))
 
         if globals.daylight_disable and globals.daylight:
             logger.debug("Disabled by daylight")
             return False
 
         if globals.enable_schedule:
-            start = kodiHue.convertTime(globals.startTime)
-            end = kodiHue.convertTime(globals.endTime)
+            start = kodiHue.convertTime(globals.start_time)
+            end = kodiHue.convertTime(globals.end_time)
             now = datetime.datetime.now().time()
             if (now > start) and (now < end):
                 logger.debug("Enabled by schedule")
@@ -194,11 +194,13 @@ class KodiGroup(xbmc.Player):
             return False
         logger.debug(
             "Video Activation settings({}): minDuration: {}, Movie: {}, Episode: {}, MusicVideo: {}, Other: {}".
-                format(self.kgroupID, globals.video_minimum_duration, globals.video_enable_movie,
+                format(self.kgroup_id, globals.video_minimum_duration, globals.video_enable_movie,
                        globals.video_enable_episode,
                        globals.video_enable_music_video, globals.video_enable_other))
-        logger.debug("Video Activation ({}): Duration: {}, media_type: {}".format(self.kgroupID, duration, media_type))
-        if duration > globals.video_minimum_duration and ((globals.video_enable_movie and media_type == "movie") or (globals.video_enable_episode and media_type == "episode") or (globals.video_enable_music_video and media_type == "MusicVideo")) or globals.video_enable_other:
+        logger.debug("Video Activation ({}): Duration: {}, media_type: {}".format(self.kgroup_id, duration, media_type))
+        if duration > globals.video_minimum_duration and ((globals.video_enable_movie and media_type == "movie") or (
+                globals.video_enable_episode and media_type == "episode") or (
+                                                                  globals.video_enable_music_video and media_type == "MusicVideo")) or globals.video_enable_other:
             logger.debug("Video activation: True")
             return True
         logger.debug("Video activation: False")

@@ -93,8 +93,8 @@ class ImageProcess(object):
         # Return modified Hue brightness value from ratio of dark pixels
 
     def get_brightness(self, min_bri, max_bri, dark_pixel_ratio):
-        # max_bri = int(maxBri)
-        # min_bri = int(minBri)
+        # max_bri = int(max_bri)
+        # min_bri = int(min_bri)
 
         normal_range = max(1, max_bri - 1)
         new_range = max_bri - min_bri
