@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-#from __future__ import print_function
+# from __future__ import print_function
 
 
 ######### Based upon: https://raw.githubusercontent.com/Quihico/handy.stuff/master/language.py
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         strings = re.compile("_\([\"'](.*?)[\"']\)", re.IGNORECASE).findall(r)
         translated = [m.msgid.lower().replace("'", "\\'") for m in po]
         missing = set([s for s in strings if s.lower() not in translated])
-        
+
         if missing:
             ids_range = list(range(30000, 31000))
             ids_reserved = [int(m.msgctxt[1:]) for m in po]
@@ -63,9 +63,12 @@ if __name__ == "__main__":
                                                     m.msgctxt.replace("#", "").strip())
             f.write(line)
 else:
-    from .globals import STRDEBUG,ADDON,ADDONID
+    from .globals import STRDEBUG, ADDON, ADDONID
     from logging import getLogger
+
     logger = getLogger(ADDONID)
+
+
     def get_string(t):
         string_id = _strings.get(t.lower())
         if not string_id:
@@ -73,7 +76,7 @@ else:
             return t
 
         if STRDEBUG is True:
-            return  "STR:{} {}".format(string_id,ADDON.getLocalizedString(string_id))
+            return "STR:{} {}".format(string_id, ADDON.getLocalizedString(string_id))
         return ADDON.getLocalizedString(string_id)
         # =======================================================================
         # elif id in range(30000, 31000) and ADDON_ID.startswith("plugin"): return ADDON.getLocalizedString(id)
@@ -83,7 +86,7 @@ else:
         # =======================================================================
     # setattr(__builtin__, "_", get_string)
 
-#GENERATED
+# GENERATED
 _strings['video actions'] = 32100
 _strings['audio actions'] = 32102
 _strings['start/resume'] = 32201

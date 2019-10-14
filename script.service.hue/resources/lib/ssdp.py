@@ -13,13 +13,16 @@
 #   limitations under the License.
 
 import socket
-import httplib
+
 import StringIO
+import httplib
+
 
 class SSDPResponse(object):
     class _FakeSocket(StringIO.StringIO):
         def makefile(self, *args, **kw):
             return self
+
     def __init__(self, response):
         r = httplib.HTTPResponse(self._FakeSocket(response))
         r.begin()
@@ -28,8 +31,10 @@ class SSDPResponse(object):
         self.st = r.getheader("st")
         self.server = r.getheader("server")
         self.cache = r.getheader("cache-control").split("=")[1]
+
     def __repr__(self):
         return "<SSDPResponse({location}, {st}, {usn})>".format(**self.__dict__)
+
 
 def discover(service, timeout=5, retries=1, mx=3):
     group = ("239.255.255.250", 1900)
@@ -37,7 +42,7 @@ def discover(service, timeout=5, retries=1, mx=3):
         'M-SEARCH * HTTP/1.1',
         'HOST: {0}:{1}',
         'MAN: "ssdp:discover"',
-        'ST: {st}','MX: {mx}','',''])
+        'ST: {st}', 'MX: {mx}', '', ''])
     socket.setdefaulttimeout(timeout)
     responses = {}
     for _ in range(retries):
