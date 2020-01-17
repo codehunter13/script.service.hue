@@ -10,7 +10,9 @@ http://www.screenbloom.com/
 
 from PIL import ImageEnhance
 from resources.lib import timer
-
+import time
+import os
+import xbmc
 
 class ImageProcess(object):
 
@@ -38,7 +40,17 @@ class ImageProcess(object):
         # clock=time.localtime()
         # savepath = os.path.join(xbmc.translatePath("special://userdata/addon_data/script.service.hue/debugimages/"), str(clock) + ".png")
         # img.save(savepath)
+
+        # image2 = img.crop((0,0,200,225))
+        # savepath = os.path.join(xbmc.translatePath("special://userdata/addon_data/script.service.hue/debugimages/"), str(clock) + "LEFT.png")
+        # image2.save(savepath)
+
+        # image3 = img.crop((200,0,400,225))
+        # savepath = os.path.join(xbmc.translatePath("special://userdata/addon_data/script.service.hue/debugimages/"), str(clock) + "RIGHT.png")
+        # image3.save(savepath)
         #=======================================================================
+
+                       
 
 
         # Create list of pixels

@@ -112,11 +112,24 @@ class AmbiGroup(KodiGroup.KodiGroup):
             self.updateInterval = 0.002
 
         self.ambiLights = {}
-        lightIDs = ADDON.getSetting("group{}_Lights".format(self.kgroupID)).split(",")
-        index = 0
+        self.zone = ADDON.getSetting("group3_zones")
+        logger.info("zone: " + self.zone)
+        if self.zone == "1":
+            lightIDs = ADDON.getSetting("group{}_Lights".format(self.kgroupID)).split(",")
+            self.createLights(lightIDs,0)
+        elif self.zone == "2":
+            lightIDsLeft = ADDON.getSetting("group{}_LightsLeft".format(self.kgroupID)).split(",")
+            self.createLights(lightIDsLeft,0)
+            lightIDsRight = ADDON.getSetting("group{}_LightsRight".format(self.kgroupID)).split(",")
+            self.createLights(lightIDsRight,1)
+
+    def createLights(self,lightIDs,position):
+        index = len(self.ambiLights)
         for L in lightIDs:
+            # logger.info("LightID: " + L)
+            # logger.info("position: " + position)
             gamut = kodiHue.getLightGamut(self.bridge, L)
-            light = {L: {'gamut': gamut, 'prevxy': (0, 0), "index": index}}
+            light = {L: {'gamut': gamut, 'prevxy': (0, 0), "index": index,'position':position}}
             self.ambiLights.update(light)
             index = index + 1
 
@@ -166,6 +179,7 @@ class AmbiGroup(KodiGroup.KodiGroup):
                         continue  # no image captured, try again next iteration
                     image = Image.frombuffer("RGBA", (self.captureSize, self.captureSizeY), buffer(capImage), "raw",
                                              "BGRA")
+                    
                 except ValueError:
                     logger.error("capImage: {}".format(len(capImage)))
                     logger.exception("Value Error")
@@ -177,8 +191,39 @@ class AmbiGroup(KodiGroup.KodiGroup):
                     self.monitor.waitForAbort(0.25)
                     continue
 
-                colors = self.imageProcess.img_avg(image, self.minBri, self.maxBri, self.saturation)
+                
+
+                # lighRight = self.ambiLights['0']
+                # lighLeft = self.ambiLights['1']
+
+                # threadLeft = Thread(target=self._updateHueRGB, name="updateHue", args=(
+                #          colors2['rgb'][0], colors2['rgb'][1], colors2['rgb'][2], lighLeft, self.transitionTime, colors2['bri']))
+                # threadLeft.daemon = True
+
+                # threadRight = Thread(target=self._updateHueRGB, name="updateHue", args=(
+                #          colors3['rgb'][0], colors3['rgb'][1], colors3['rgb'][2], lighRight, self.transitionTime, colors3['bri']))
+                # threadRight.daemon = True
+
+                # threadLeft.start()
+                # threadRight.start()
+
+                colorZones = []
+                if self.zone == "1":
+                    colorZones.append(self.imageProcess.img_avg(image, self.minBri, self.maxBri, self.saturation))
+                elif self.zone == "2":
+                    image2 = image.crop((0,0,200,225))
+                    colorZones.append(self.imageProcess.img_avg(image2, self.minBri, self.maxBri, self.saturation))
+                    # savepath = os.path.join(xbmc.translatePath("special://userdata/addon_data/script.service.hue/debugimages/"), str(clock) + "LEFT.png")
+                    # image2.save(savepath)
+                    image3 = image.crop((200,0,400,225))
+                    colorZones.append(self.imageProcess.img_avg(image3, self.minBri, self.maxBri, self.saturation))
+                    # savepath = os.path.join(xbmc.translatePath("special://userdata/addon_data/script.service.hue/debugimages/"), str(clock) + "RIGHT.png")
+                    # image3.save(savepath)
+                    
                 for L in self.ambiLights:
+                    position = self.ambiLights[L].get('position')
+                    # logger.debug("position " + position)
+                    colors = colorZones[position]
                     x = Thread(target=self._updateHueRGB, name="updateHue", args=(
                         colors['rgb'][0], colors['rgb'][1], colors['rgb'][2], L, self.transitionTime, colors['bri']))
                     x.daemon = True

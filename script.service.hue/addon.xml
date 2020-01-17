@@ -1,4 +1,4 @@
-<addon id="script.service.hue" name="Hue Service" provider-name="zim514" version="0.12.7">
+<addon id="script.service.hue" name="Hue Service2" provider-name="zim514" version="0.12.7">
 	<requires>
 		<import addon="xbmc.python" version="2.26.0" />
 		<import addon="script.module.requests" version="2.22.0" />
@@ -31,7 +31,7 @@
 v0.12.5:
 - Show error message if no ambilights selected
 - Fix crash when configuring Ambilight for the first time
-- Improve crash reporting
+- Improve crash reporting and more 2eee
 		</news>
 	</extension>
 </addon>

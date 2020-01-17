@@ -513,3 +513,31 @@ msgstr ""
 msgctxt "#30081"
 msgid "Automatically report this error?"
 msgstr ""
+
+msgctxt "#30090"
+msgid "Select Hue Lights left..."
+msgstr "Select Hue Lights left..."
+
+msgctxt "#30092"
+msgid "Light Names left:"
+msgstr "Light Names left:"
+
+msgctxt "#30094"
+msgid "Select Hue Lights right..."
+msgstr "Select Hue Lights right..."
+
+msgctxt "#30096"
+msgid "Light Names right:"
+msgstr "Light Names right:"
+
+msgctxt "#30098"
+msgid "Lights left:"
+msgstr ""
+
+msgctxt "#30099"
+msgid "Lights right:"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Zones:"
+msgstr "Zones:"

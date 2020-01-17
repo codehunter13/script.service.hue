@@ -31,6 +31,7 @@ def read_settings():
     settings_storage['video_enableOther'] = ADDON.getSettingBool("video_Other")
 
     settings_storage['ambiEnabled'] = ADDON.getSettingBool("group3_enabled")
+    settings_storage['zones'] = ADDON.getSetting("group3_zones")
     _validate_schedule()
     _validate_ambilight()
 
@@ -38,12 +39,26 @@ def read_settings():
 def _validate_ambilight():
     logger.debug("Validate ambilight config. Enabled: {}".format(settings_storage['ambiEnabled']))
     if settings_storage['ambiEnabled']:
-        light_ids = ADDON.getSetting("group3_Lights")
-        if light_ids == "-1":
-            logger.error("No ambilights selected")
-            xbmcgui.Dialog().notification(_("Hue Service"), _("No lights selected for Ambilight."), icon=xbmcgui.NOTIFICATION_ERROR)
-            ADDON.setSettingBool("group3_enabled", False)
-            settings_storage['ambiEnabled'] = False
+        if settings_storage['zones'] == "0":
+            light_ids = ADDON.getSetting("group3_Lights")
+            if light_ids == "-1":
+                logger.error("No ambilights selected")
+                xbmcgui.Dialog().notification(_("Hue Service"), _("No lights selected for Ambilight."), icon=xbmcgui.NOTIFICATION_ERROR)
+                ADDON.setSettingBool("group3_enabled", False)
+                settings_storage['ambiEnabled'] = False
+        if settings_storage['zones'] == "1":
+            light_idsLeft = ADDON.getSetting("group3_LightsLeft")
+            if light_idsLeft == "-1":
+                logger.error("No ambilights selected for left zone")
+                xbmcgui.Dialog().notification(_("Hue Service"), _("No lights selected for Ambilight in left zone."), icon=xbmcgui.NOTIFICATION_ERROR)
+                ADDON.setSettingBool("group3_enabled", False)
+                settings_storage['ambiEnabled'] = False
+            light_idsRight = ADDON.getSetting("group3_LightsRight")
+            if light_idsRight == "-1":
+                logger.error("No ambilights selected for right zone")
+                xbmcgui.Dialog().notification(_("Hue Service"), _("No lights selected for Ambilight in right zone."), icon=xbmcgui.NOTIFICATION_ERROR)
+                ADDON.setSettingBool("group3_enabled", False)
+                settings_storage['ambiEnabled'] = False
 
 
 def _validate_schedule():

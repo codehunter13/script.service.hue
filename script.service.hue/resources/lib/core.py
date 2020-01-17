@@ -77,11 +77,12 @@ def commands(monitor, command):
 
     elif command == "ambiLightSelect":  # ambiLightSelect=kgroupID
         kgroup = sys.argv[2]
-        logger.debug("Started with {}, kgroupID: {}".format(command, kgroup))
+        zone = sys.argv[3]
+        logger.debug("Started with {}, kgroupID: {}, zone:{}".format(command, kgroup,zone))
 
         bridge = kodiHue.connectBridge(monitor, silent=True)  # don't rediscover, proceed silently
         if bridge is not None:
-            kodiHue.configureAmbiLights(bridge, kgroup)
+            kodiHue.configureAmbiLights(bridge, kgroup,zone)
         else:
             logger.debug("No bridge found. scene ambi lights cancelled.")
             xbmcgui.Dialog().notification(_("Hue Service"), _("Check Hue Bridge configuration"))

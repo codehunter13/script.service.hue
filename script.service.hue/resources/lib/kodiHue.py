@@ -260,7 +260,7 @@ def configureScene(bridge, kGroupID, action):
         ADDON.openSettings()
 
 
-def configureAmbiLights(bridge, kGroupID):
+def configureAmbiLights(bridge, kGroupID,zone):
     lights = selectHueLights(bridge)
     lightNames = []
     colorLights = []
@@ -270,10 +270,27 @@ def configureAmbiLights(bridge, kGroupID):
             # if gamut == "A" or gamut== "B" or gamut == "C": #defaults to C if unknown model
             lightNames.append(_getLightName(bridge, L))
             colorLights.append(L)
-
-        ADDON.setSettingString("group{}_Lights".format(kGroupID), ','.join(colorLights))
-        ADDON.setSettingString("group{}_LightNames".format(kGroupID), ','.join(lightNames))
-        ADDON.setSettingBool("group{}_enabled".format(kGroupID), True)
+        if zone == "0":
+            ADDON.setSettingString("group{}_Lights".format(kGroupID), ','.join(colorLights))
+            ADDON.setSettingString("group{}_LightNames".format(kGroupID), ','.join(lightNames))
+            ADDON.setSettingBool("group{}_enabled".format(kGroupID), True)
+            logger.debug("Configured ambilights for zone {}".format(zone))
+        else:
+            if zone == "1":
+                ADDON.setSettingString("group{}_LightsLeft".format(kGroupID), ','.join(colorLights))
+                ADDON.setSettingString("group{}_LightNamesLeft".format(kGroupID), ','.join(lightNames))
+                light_idsRight = ADDON.getSetting("group3_LightsRight")
+                if light_idsRight != "-1":
+                    ADDON.setSettingBool("group{}_enabled".format(kGroupID), True)
+                logger.debug("Configured ambilights for zone {}".format(zone))
+            elif zone == "2":
+                ADDON.setSettingString("group{}_LightsRight".format(kGroupID), ','.join(colorLights))
+                ADDON.setSettingString("group{}_LightNamesRight".format(kGroupID), ','.join(lightNames))
+                light_idsLeft = ADDON.getSetting("group3_LightsLeft")
+                if light_idsLeft != "-1":
+                    ADDON.setSettingBool("group{}_enabled".format(kGroupID), True)
+                logger.debug("Configured ambilights for zone {}".format(zone))
+            
         ADDON.openSettings()
 
 
